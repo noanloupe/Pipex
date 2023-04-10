@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noloupe <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: noloupe <noloupe@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 15:16:36 by noloupe           #+#    #+#             */
-/*   Updated: 2022/10/07 15:26:27 by noloupe          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:58:16 by noloupe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	const char	*str1;
 	const char	*str2;
 
+	if (!s1 && !s2)
+		return (0);
+	else if (!s1 || !s2)
+		return (-1);
 	str1 = s1;
 	str2 = s2;
 	i = 0;

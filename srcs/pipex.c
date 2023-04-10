@@ -6,13 +6,13 @@
 /*   By: noloupe <noloupe@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 13:51:39 by noloupe           #+#    #+#             */
-/*   Updated: 2023/04/03 14:39:46 by noloupe          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:27:40 by noloupe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	make_child(char *argv, char **envp)
+void	make_child(char *argv, char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -32,15 +32,16 @@ void	make_child(char *argv, char **envp)
 	}
 	else
 	{
+		data->pids[data->j] = pid;
+		data->j += 1;
 		if (dup2(fd[0], STDIN_FILENO) == -1)
 			print_perror("dup2");
 		close(fd[0]);
 		close(fd[1]);
-		waitpid(pid, NULL, 0);
 	}
 }
 
-void	here_doc(int argc, char *LIM)
+void	here_doc(int argc, char *lim, t_data *data)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -56,24 +57,25 @@ void	here_doc(int argc, char *LIM)
 	{
 		close(fd[0]);
 		while (1)
-			lim_check(fd[1], LIM);
+			lim_check(fd[1], lim);
 	}
 	else
 	{
+		data->pids[data->j] = pid;
+		data->j += 1;
 		if (dup2(fd[0], STDIN_FILENO) == -1)
 			print_perror("dup2");
 		close(fd[0]);
 		close(fd[1]);
-		waitpid(pid, NULL, 0);
 	}
 }
 
-void	lim_check(int fd, char *LIM)
+void	lim_check(int fd, char *lim)
 {
 	char	*line;
 
 	line = get_next_line(0);
-	if (!ft_memcmp(line, LIM, ft_strlen(LIM)))
+	if (!ft_memcmp(line, lim, ft_strlen(lim)))
 	{
 		close(fd);
 		free(line);
